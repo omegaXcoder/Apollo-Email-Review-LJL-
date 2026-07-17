@@ -1,0 +1,14 @@
+# Secrets — never commit
+.env
+
+# Raw Apollo API pulls (regenerated every run; kept as workflow artifacts in CI)
+data/
+
+# Dependencies
+node_modules/
+
+# reports/ is intentionally committed — the pipeline compares each run
+# against the previous report for trend analysis
+
+# Local Claude Code settings
+.claude/settings.local.json

@@ -1,0 +1,75 @@
+name: Campaign Pipeline
+
+on:
+  schedule:
+    # Every Monday 13:00 UTC (8am EST / 9am EDT) — adjust as needed
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+    inputs:
+      sequence_ids:
+        description: "Sequence ID(s) to target, comma-separated. Leave as 'auto' to run all active email campaigns."
+        required: false
+        default: "auto"
+      auto_apply:
+        description: "Write rewritten copy back into Apollo"
+        required: false
+        type: choice
+        options:
+          - "true"
+          - "false"
+        default: "true"
+
+permissions:
+  contents: write # allows the workflow to commit reports/ back for trend history
+
+concurrency:
+  group: campaign-pipeline
+  cancel-in-progress: false
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run pipeline
+        env:
+          APOLLO_API_KEY: ${{ secrets.APOLLO_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          # Non-secret settings — edit here, no secrets UI needed
+          SMTP_HOST: smtp.gmail.com
+          SMTP_PORT: "587"
+          SMTP_USER: nikki@yourcallboss.com
+          REPORT_EMAILS: john@littlejohnslawns.com,teel.t@yourcallboss.com
+          # Manual runs can pin sequences / turn off apply; scheduled runs use the defaults
+          APOLLO_SEQUENCE_IDS: ${{ github.event.inputs.sequence_ids || 'auto' }}
+          AUTO_APPLY: ${{ github.event.inputs.auto_apply || 'true' }}
+        run: node pipeline/run.js
+
+      - name: Upload raw data as run artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-output-${{ github.run_number }}
+          path: |
+            data/
+            reports/
+          retention-days: 90
+
+      - name: Commit reports for trend history
+        if: always()
+        run: |
+          git config user.name "campaign-pipeline[bot]"
+          git config user.email "pipeline@users.noreply.github.com"
+          git add reports/
+          git diff --cached --quiet || git commit -m "Pipeline reports $(date -u +%F) [skip ci]"
+          git push

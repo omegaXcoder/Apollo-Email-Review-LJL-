@@ -1,0 +1,13 @@
+{
+  "name": "call-boss-apollo-pipeline",
+  "private": true,
+  "type": "module",
+  "description": "Automated Apollo email campaign evaluation + optimization pipeline",
+  "scripts": {
+    "start": "node pipeline/run.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
+    "nodemailer": "^9.0.3"
+  }
+}

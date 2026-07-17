@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($errors = $null; $null = [System.Management.Automation.Language.Parser]::ParseFile\\(\"E:\\\\Kudos\\\\Programs\\\\Call Boss Apollo Email Evaluation\\\\scripts\\\\Fetch-ApolloStats.ps1\", [ref]$null, [ref]$errors\\); if \\($errors.Count -eq 0\\) { \"Syntax OK\" } else { $errors | ForEach-Object { \"$\\($_.Extent.StartLineNumber\\): $\\($_.Message\\)\" } })",
+      "PowerShell(powershell -File \"E:\\\\Kudos\\\\Programs\\\\Call Boss Apollo Email Evaluation\\\\scripts\\\\Fetch-ApolloStats.ps1\" -SequenceId test123)",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)",
+      "PowerShell(npm install)",
+      "PowerShell(npm audit --json | ConvertFrom-Json | ForEach-Object { $_.vulnerabilities.PSObject.Properties | ForEach-Object { \"$\\($_.Name\\): $\\($_.Value.severity\\) - fixAvailable: $\\($_.Value.fixAvailable\\)\" } })",
+      "PowerShell(npm install @anthropic-ai/sdk@latest nodemailer@latest)",
+      "PowerShell(npm audit)",
+      "PowerShell(node pipeline\\\\run.js)",
+      "PowerShell(node --check pipeline\\\\run.js)",
+      "PowerShell(node --check pipeline\\\\lib\\\\env.js)",
+      "PowerShell(node --check pipeline\\\\lib\\\\apollo.js)",
+      "PowerShell(\"Syntax OK\")",
+      "PowerShell(node -e \"import\\('./pipeline/lib/env.js'\\).then\\(async \\({loadConfig}\\) => { const cfg = loadConfig\\(\\); const {listSequences} = await import\\('./pipeline/lib/apollo.js'\\); const seqs = await listSequences\\(cfg.apolloApiKey\\); console.log\\('Total sequences:', seqs.length\\); for \\(const s of seqs\\) console.log\\(\\(s.active ? '[ACTIVE]  ' : '[inactive]'\\), s.id, s.name\\); }\\)\")",
+      "PowerShell(node --check pipeline\\\\lib\\\\briefs.js)",
+      "PowerShell(node -e \"import\\('./pipeline/lib/briefs.js'\\).then\\(\\({loadBriefs, selectBrief}\\) => { const briefs = loadBriefs\\(\\); const names = ['CB Email Revamp - sector 5','CB Email Revamp - sector 4','CB Email Revamp - sector 3','CB LI Sector 1','CB LI Sector 4','CB LI Sector 5','CB LI Sector 3','Cappsure LI Sector 3','Cappsure LI Sector 1','Cappsure LI Sector 2','Cappsure Email Campaign \\(Landscaping\\) \\(A Test\\)','Some Unrelated Sequence']; for \\(const n of names\\) console.log\\(n.padEnd\\(48\\), '->', selectBrief\\(briefs, 'FALLBACK', n\\).source\\); }\\)\")",
+      "PowerShell(node pipeline\\\\run.js 2>&1 | Tee-Object -FilePath \"$env:TEMP\\\\pipeline-run-1.log\")",
+      "PowerShell(node -e \"const s = require\\('./data/2026-07-14-69a6f5b471bbb90015956332-summary.json'\\); console.log\\('CB LI Sector 1 step types:', s.steps.map\\(x=>x.type\\).join\\(', '\\)\\); const e = require\\('./data/2026-07-14-69f365095f308f0015f454db-summary.json'\\); console.log\\('CB Email Revamp s5 step types:', e.steps.map\\(x=>x.type\\).join\\(', '\\)\\);\")",
+      "PowerShell(node --check pipeline\\\\lib\\\\claude.js)",
+      "PowerShell(git init -b main)",
+      "PowerShell(git add -A)"
+    ]
+  }
+}
