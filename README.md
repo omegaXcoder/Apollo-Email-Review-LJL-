@@ -54,14 +54,29 @@ For each sequence in `APOLLO_SEQUENCE_IDS`, the pipeline:
 One sequence failing doesn't stop the others — errors are reported per-sequence
 in the email and the console.
 
-## Run it on a schedule
+## Run it on a schedule (GitHub Actions)
 
-Windows Task Scheduler, weekly on Monday at 8am:
+The repo ships with [.github/workflows/campaign-pipeline.yml](.github/workflows/campaign-pipeline.yml):
 
-```powershell
-schtasks /Create /TN "CallBossCampaignPipeline" /SC WEEKLY /D MON /ST 08:00 `
-  /TR "\"E:\Kudos\Programs\Call Boss Apollo Email Evaluation\pipeline\run.cmd\""
-```
+- **Scheduled:** every Monday 13:00 UTC (8am EST). Edit the `cron` line to change.
+- **Manual:** GitHub → Actions → Campaign Pipeline → "Run workflow", with two inputs:
+  - `sequence_ids` — leave as `auto` for all active email campaigns, or paste
+    specific ID(s), comma-separated, to target just those
+  - `auto_apply` — set `false` for a report-only dry run
+
+One-time setup after pushing the repo:
+
+1. GitHub repo → Settings → Secrets and variables → Actions → add three
+   **secrets**: `APOLLO_API_KEY`, `ANTHROPIC_API_KEY`, `SMTP_PASS`
+2. Non-secret settings (SMTP host/user, report recipients) live in plain env
+   lines in the workflow file — edit them there
+3. Reports are committed back to the repo by the workflow after each run
+   (that's how trend comparison persists between CI runs) and also uploaded
+   as workflow artifacts alongside the raw `data/` pulls
+
+Local runs still work exactly the same (`npm start` reads `.env`).
+Windows Task Scheduler alternative: `pipeline\run.cmd` wraps the run for
+`schtasks` if you ever want a local schedule instead.
 
 Match the cadence to send volume: re-running before ~150-200 new deliveries per
 variant just re-litigates the same data. Weekly is right for most volumes.
