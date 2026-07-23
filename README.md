@@ -58,7 +58,7 @@ in the email and the console.
 
 The repo ships with [.github/workflows/campaign-pipeline.yml](.github/workflows/campaign-pipeline.yml):
 
-- **Scheduled:** every Monday 13:00 UTC (8am EST). Edit the `cron` line to change.
+- **Scheduled:** every Monday 10:00 UTC (6am US Eastern / EDT). Edit the `cron` line to change; note cron doesn't follow DST, see comment in the workflow file.
 - **Manual:** GitHub → Actions → Campaign Pipeline → "Run workflow", with two inputs:
   - `sequence_ids` — leave as `auto` for all active email campaigns, or paste
     specific ID(s), comma-separated, to target just those

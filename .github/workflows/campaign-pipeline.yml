@@ -2,8 +2,11 @@ name: Campaign Pipeline
 
 on:
   schedule:
-    # Every Monday 13:00 UTC (8am EST / 9am EDT) — adjust as needed
-    - cron: "0 13 * * 1"
+    # Every Monday 10:00 UTC = 6am US Eastern (EDT, UTC-4). Note: cron is fixed
+    # UTC and does not follow DST — during EST (UTC-5, roughly Nov-Mar) this
+    # will run at 5am ET instead of 6am. Adjust to "0 11 * * 1" for winter if
+    # exact wall-clock time matters, or split into two seasonal schedules.
+    - cron: "0 10 * * 1"
   workflow_dispatch:
     inputs:
       sequence_ids:
