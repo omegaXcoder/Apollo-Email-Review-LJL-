@@ -188,6 +188,12 @@ function buildEmailBody(results, skipped, failures, autoApply, today) {
   for (const r of results) {
     const applied = r.applyResults?.filter((a) => a.ok).length ?? 0;
     const failed = r.applyResults?.filter((a) => !a.ok).length ?? 0;
+    // Lead each sequence's notes with what to act on (recommended changes,
+    // then the diagnosis's prioritized issues) before the full evaluation
+    // detail — that's what actually gets reviewed each week.
+    const abPlanIndex = r.optMarkdown.indexOf("## A/B test plan");
+    const recommendedChanges = abPlanIndex === -1 ? r.optMarkdown : r.optMarkdown.slice(0, abPlanIndex).trimEnd();
+    const optimizationDetail = abPlanIndex === -1 ? "" : r.optMarkdown.slice(abPlanIndex);
     parts.push(
       `# ${r.name} (${r.sequenceId})`,
       "",
@@ -198,11 +204,13 @@ function buildEmailBody(results, skipped, failures, autoApply, today) {
             (failed ? ` — **${failed} failed, see below for copy to paste by hand**` : "")
         : "**Auto-apply is off — all changes below are proposals.**",
       "",
+      recommendedChanges,
+      "",
       "## Evaluation",
       "",
       r.evaluation,
       "",
-      r.optMarkdown,
+      optimizationDetail,
       "",
       "---",
       "",

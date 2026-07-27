@@ -71,24 +71,24 @@ Write the report to `reports/YYYY-MM-DD-evaluation.md` with this structure:
 ## Verdict
 <2-3 sentences: overall health, the single biggest problem, and what fixing it is worth>
 
+## Prioritized issues
+1. <biggest issue> — evidence: <metric/observation> — estimated impact: <high/med/low>
+2. ...
+3. ...
+
 ## Scorecard
 | Metric | Value | Benchmark | Target (brief) | Status |
 |---|---|---|---|---|
 <one row per metric; Status is 🟢 / 🟡 / 🔴>
 
 ## Funnel
-<scheduled → delivered → opened → replied with % at each stage and the biggest leak called out>
+<delivered → opened → replied with % at each stage and the biggest leak called out>
 
 ## Step-by-step
 <table or list per step: sends, opens, replies, verdict on each step/variant>
 
 ## Copy-to-audience fit
 <specific observations tying actual copy to the brief>
-
-## Prioritized issues
-1. <biggest issue> — evidence: <metric/observation> — estimated impact: <high/med/low>
-2. ...
-3. ...
 
 ## Open questions
 <anything the data can't answer that the user should check in Apollo directly,
