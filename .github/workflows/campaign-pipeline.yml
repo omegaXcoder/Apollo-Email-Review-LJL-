@@ -52,7 +52,7 @@ jobs:
           SMTP_HOST: smtp.gmail.com
           SMTP_PORT: "587"
           SMTP_USER: nikki@yourcallboss.com
-          REPORT_EMAILS: john@littlejohnslawns.com,teel.t@yourcallboss.com
+          REPORT_EMAILS: john@littlejohnslawns.com,teel.t@yourcallboss.com,omega@kudos.marketing
           # Manual runs can pin sequences / turn off apply; scheduled runs use the defaults
           APOLLO_SEQUENCE_IDS: ${{ github.event.inputs.sequence_ids || 'auto' }}
           AUTO_APPLY: ${{ github.event.inputs.auto_apply || 'true' }}
