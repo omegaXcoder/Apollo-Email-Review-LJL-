@@ -19,12 +19,21 @@ Work through these layers in order, because problems upstream invalidate signals
 downstream (e.g., you cannot judge copy quality if half the sends bounce):
 
 ### 1. Deliverability health (gate)
-- Delivery rate (target: >97%), bounce rate (alarm: >2%), spam-block rate (alarm: >0.3%)
-- If deliverability is broken, say so plainly and flag that engagement metrics below
-  are unreliable until it's fixed.
+- Bounce rate (alarm: >2%), spam-block rate (alarm: >0.3%), both measured against
+  attempted sends (delivered + bounced + spam-blocked).
+- Do NOT report a "delivery rate" metric. Apollo's `unique_scheduled` field reflects
+  contacts currently queued, not total list size, and sending here is intentionally
+  throttled (a fixed daily volume, not a full-list blast) — so delivered ÷ any
+  list-size or scheduled denominator conflates "hasn't been sent yet by design" with
+  a deliverability failure. Bounce rate and spam-block rate are the reliable signals;
+  use those alone to judge deliverability health.
+- If bounce or spam-block is elevated, say so plainly and flag that engagement
+  metrics below are unreliable until it's fixed.
 
 ### 2. Engagement funnel
-- Scheduled → Delivered → Opened → Replied (→ Clicked if links are used)
+- Delivered → Opened → Replied (→ Clicked if links are used). Do not start the
+  funnel at "Scheduled" — see the note above on why that denominator is misleading
+  with throttled sending.
 - Identify the single biggest leak in the funnel — the stage with the largest
   drop-off relative to healthy cold-outreach benchmarks:
   - Open rate: <30% weak · 30–50% typical · >50% strong (note: opens are inflated by
@@ -94,5 +103,8 @@ e.g., positive vs. negative reply sentiment, which Apollo doesn't expose via API
   small sample sizes — state the n whenever you make a comparative claim.
 - Apollo's API does not expose reply sentiment. Reply rate counts angry replies
   too — remind the user to spot-check actual replies before celebrating.
+- Never include a "delivery rate" row in the scorecard or funnel. Bounce rate and
+  spam-block rate cover deliverability; a delivery-rate figure built from an
+  incomplete send count misrepresents intentional throttled pacing as a failure.
 - Do NOT propose fixes here. That's the optimization prompt's job. End with the
   diagnosis.
